@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Jobmate{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-purple-50 font-sans">
+
+  <!-- ✅ 공통 헤더 -->
+  <header class="flex justify-between items-center px-8 py-4 mx-12 mt-10 bg-white rounded-full shadow-md">
+    <!-- 로고 -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-yellow-300 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs">JM</div>
+      <h1 class="text-xl font-black">Jobmate</h1>
+    </div>
+
+    <!-- 네비게이션 -->
+    <nav class="flex items-center space-x-8 text-sm font-medium">
+      <a href="/" class="hover:underline">HOME</a>
+      <a href="/jobs/" class="hover:underline">JOBS</a>
+      <a href="/resumes/" class="hover:underline">RESUMES</a>
+      <a href="/how/" class="hover:underline">HOW IT WORKS?</a>
+    </nav>
+
+    <!-- 회원가입 버튼 -->
+    <a href="#" class="bg-purple-300 text-sm font-bold px-5 py-2 rounded-full shadow hover:bg-purple-400 transition transform hover:scale-110">
+      SIGN UP
+    </a>
+  </header>
+
+  <!-- ✅ 메인 콘텐츠 -->
+  <main class="px-12 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ✅ 공통 푸터 -->
+  <footer class="text-center py-4 text-xs text-gray-500 border-t mt-12">
+    &copy; 2025 Jobmate. All rights reserved.
+  </footer>
+
+</body>
+</html>
