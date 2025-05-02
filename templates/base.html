@@ -7,32 +7,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-purple-50 font-sans">
+<body class="bg-white font-sans">
 
-  <!-- ✅ 공통 헤더 -->
-  <header class="flex justify-between items-center px-8 py-4 mx-12 mt-10 bg-white rounded-full shadow-md">
+  <!-- ✅ 공통 헤더 (반응형 + 로그인 상태 UI 적용) -->
+  <header class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 px-6 py-4 mx-4 md:mx-12 mt-6 md:mt-10 bg-white rounded-3xl shadow-md">
+    
     <!-- 로고 -->
     <div class="flex items-center space-x-2">
       <div class="bg-yellow-300 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs">JM</div>
-      <h1 class="text-xl font-black">Jobmate</h1>
+      <h1 class="text-lg md:text-xl font-black">Jobmate</h1>
     </div>
 
     <!-- 네비게이션 -->
-    <nav class="flex items-center space-x-8 text-sm font-medium">
+    <nav class="flex flex-wrap justify-center gap-4 md:gap-8 text-sm md:text-base font-medium text-gray-800">
       <a href="/" class="hover:underline">HOME</a>
       <a href="/jobs/" class="hover:underline">JOBS</a>
       <a href="/resumes/" class="hover:underline">RESUMES</a>
-      <a href="/how/" class="hover:underline">HOW IT WORKS?</a>
+    
+      {% if user.is_authenticated %}
+        {% if not user.is_company %}
+          <!-- 일반 사용자 메뉴 -->
+          <a href="{% url 'applications:my_applications' %}" class="hover:underline">내 지원 내역</a>
+        {% else %}
+          <!-- 기업 사용자 메뉴 -->
+          <a href="{% url 'jobs:my_job_list' %}" class="hover:underline">내 공고 내역</a>
+        {% endif %}
+      {% endif %}
     </nav>
 
-    <!-- 회원가입 버튼 -->
-    <a href="#" class="bg-purple-300 text-sm font-bold px-5 py-2 rounded-full shadow hover:bg-purple-400 transition transform hover:scale-110">
-      SIGN UP
-    </a>
+    <!-- ✅ 사용자 인증 상태에 따른 버튼 -->
+    <div class="flex items-center gap-4">
+      {% if user.is_authenticated %}
+        <!-- 로그인 상태: 로그아웃 버튼만 -->
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="text-sm font-bold text-red-500 hover:text-red-700">
+            LOGOUT
+          </button>
+        </form>
+      {% else %}
+        <!-- 비로그인 상태: 로그인 + 회원가입 -->
+        <a href="{% url 'login' %}" class="text-sm font-bold text-blue-600 hover:text-blue-800">
+          LOGIN
+        </a>
+        <a href="{% url 'signup' %}" class="bg-purple-300 text-sm font-bold px-5 py-2 rounded-full shadow hover:bg-purple-400 transition transform hover:scale-105">
+          SIGN UP
+        </a>
+      {% endif %}
+    </div>
   </header>
 
   <!-- ✅ 메인 콘텐츠 -->
-  <main class="px-12 py-8">
+  <main class="px-4 md:px-12 py-8">
     {% block content %}{% endblock %}
   </main>
 

@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import UserResume
+from .models import Resume
 
-admin.site.register(UserResume)  # ✅
+admin.site.register(Resume)  # ✅

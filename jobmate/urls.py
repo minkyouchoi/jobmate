@@ -19,11 +19,20 @@ from django.urls import path
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from pages import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls')), # 메인 인덱스
+    path('', views.index, name='index'), # 메인 인덱스
     path('jobs/', include('jobs.urls')), # ✅ 채용공고 리스트 연결
+    path('resumes/', include('resumes.urls')),  # ✅ 이력서 리스트 연결
+    path('accounts/', include('accounts.urls')), # ✅ 회원가입 연결
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'), # ✅ 로그인 연결
+    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'), # ✅ 로그아웃 연결
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'), # ✅ 로그인 연결
+    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'), # ✅ 로그아웃 연결
+    path('', include('applications.urls')), # ✅ 지원하기 연결
 ]
 
 if settings.DEBUG:

@@ -3,44 +3,47 @@
 
 {% block title %}Jobmate - Landing{% endblock %}
 
-
 {% block content %}
-  <!-- ✅ Hero Section -->
-  <section class="text-center py-12 relative overflow-hidden">
-    <h2 class="text-4xl font-black mb-2">FIND TALENT, GET HIRED.</h2>
-    <h3 class="text-3xl font-bold mb-6">WITH JOBMATE</h3>
 
-    <!-- ✅ 손 애니메이션 (Lottie) -->
-    <div class="h-36 overflow-hidden flex justify-center items-start">
-      <div id="lottie-hand" class="h-64 w-64 -mt-10"></div>
+<!-- ✅ Hero Section - 리디자인 -->
+<section class="flex flex-col-reverse md:flex-row items-center justify-between gap-12 px-6 py-24 bg-gradient-to-r from-blue-50 to-white rounded-3xl shadow-lg">
+  <div class="max-w-xl">
+    <h1 class="text-5xl font-extrabold leading-tight mb-6">
+      커리어 여정의<br><span class="text-blue-600">파트너</span>가 되어줄게요.
+    </h1>
+    <p class="text-lg text-gray-700 mb-6">
+      당신의 가능성을 채워줄 회사, 여기 다 있어요.
+    </p>
+    <a href="/jobs/" class="bg-blue-600 text-white font-bold px-6 py-4 rounded-full hover:bg-blue-700 transition shadow-md">
+      채용공고 보러가기 →
+    </a>
+  </div>
+  <div class="w-80 h-80">
+    <img src="{% static 'img/sample-hero.png' %}" alt="Jobmate Hero Sample" class="w-full h-full object-contain" />
+  </div>
+</section>
+
+<!-- ✅ 소개 섹션 - 리디자인 -->
+<section class="py-20 bg-gray-50 mt-20">
+  <div class="container mx-auto px-6">
+    <div class="grid md:grid-cols-3 gap-8 text-center">
+      <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+        <img src="{% static 'img/icon-fast.png' %}" class="mx-auto mb-4 w-14 h-14" />
+        <h3 class="text-lg font-bold mb-2">빠른 공고 확인</h3>
+        <p class="text-gray-600">최신 채용 정보를 신속하게 확인하세요.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+        <img src="{% static 'img/icon-easy.png' %}" class="mx-auto mb-4 w-14 h-14" />
+        <h3 class="text-lg font-bold mb-2">간편한 지원</h3>
+        <p class="text-gray-600">이력서를 바로 등록하고 클릭 한 번에 지원!</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+        <img src="{% static 'img/icon-match.png' %}" class="mx-auto mb-4 w-14 h-14" />
+        <h3 class="text-lg font-bold mb-2">맞춤 추천</h3>
+        <p class="text-gray-600">당신에게 딱 맞는 공고만 모아 보여줘요.</p>
+      </div>
     </div>
-
-    <!-- 실제 버튼 아래 클릭 영역 -->
-    <div class="mt-4">
-        <a href="#" class="bg-yellow-300 text-black font-bold px-6 py-4 rounded-xl shadow-lg hover:bg-yellow-400 transition">
-        SIGN UP NOW
-      </a>
-    </div>
-  </section>
-
-  <!-- ✅ 구름 애니메이션
-  <section class="mt-16 text-center">
-    <img src="{% static 'img/cloud.gif' %}" alt="Cloud Animation" class="mx-auto w-32">
-    <p class="mt-2 text-sm">Your friends are waiting!</p>
-  </section> -->
-
-  <!-- ✅ Lottie 로딩 스크립트는 body 제일 아래 -->
-  <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      lottie.loadAnimation({
-        container: document.getElementById('lottie-hand'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: "{% static 'animations/Animation - 1746003255741.json' %}"
-      });
-    });
-  </script>
+  </div>
+</section>
 
 {% endblock %}

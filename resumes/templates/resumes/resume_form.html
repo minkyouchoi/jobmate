@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load form_tags split_filters %} {# ✅ split 필터 로드 #}
+{% block title %}이력서 작성{% endblock %}
+{% block content %}
+
+<div class="max-w-3xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold mb-6">이력서 작성</h1>
+
+  <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow space-y-6">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <!-- 이름 -->
+    <div>
+      <label for="id_name" class="block font-semibold mb-1">이름</label>
+      {{ form.name|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 연락처 -->
+    <div>
+      <label for="id_phone" class="block font-semibold mb-1">연락처</label>
+      {{ form.phone|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 이메일 -->
+    <div>
+      <label for="id_email" class="block font-semibold mb-1">이메일</label>
+      {{ form.email|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 학력 -->
+    <div>
+      <label for="id_education" class="block font-semibold mb-1">학력</label>
+      {{ form.education|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 학력 공개 여부 -->
+    <div class="flex items-center gap-2">
+      {{ form.show_education }}
+      <label for="id_show_education" class="font-medium">학력 공개 여부</label>
+    </div>
+
+    <!-- 경력 -->
+    <div>
+      <label for="id_experience" class="block font-semibold mb-1">경력</label>
+      {{ form.experience|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 경력 단계 -->
+    <div>
+      <label for="id_career_level" class="block font-semibold mb-1">경력 단계</label>
+      {{ form.career_level|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 희망 근무지역 -->
+    <div>
+      <label for="id_preferred_location" class="block font-semibold mb-1">희망 근무지역</label>
+      {{ form.preferred_location|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 원하는 고용 형태 -->
+    <div>
+      <label for="id_employment_type" class="block font-semibold mb-1">고용 형태</label>
+      {{ form.employment_type|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 자기소개 -->
+    <div>
+      <label for="id_bio" class="block font-semibold mb-1">자기소개</label>
+      {{ form.bio|add_class:"w-full px-4 py-2 border rounded min-h-[120px]" }}
+    </div>
+
+    <!-- 기술 스택 필드 (hidden) -->
+    {{ form.skills|add_class:"hidden" }}
+
+    <!-- 기술 스택 버튼 선택 영역 -->
+    <div>
+      <label class="block font-semibold mb-2">기술 스택</label>
+      {% with "Python,Django,React,HTML,CSS,JavaScript,SQL,Git"|split:"," as skill_list %}
+      <div class="flex flex-wrap gap-2">
+        {% for skill in skill_list %}
+          <button type="button" class="skill-tag px-3 py-1 rounded-full bg-gray-200 text-sm hover:bg-blue-200"
+                  data-skill="{{ skill }}">{{ skill }}</button>
+        {% endfor %}
+      </div>
+      {% endwith %}
+    </div>
+
+    <!-- 기술 스택 상세 설명 -->
+    <div>
+      <label for="id_skills_detail" class="block font-semibold mb-1">기술 상세 설명</label>
+      {{ form.skills_detail|add_class:"w-full px-4 py-2 border rounded min-h-[100px]" }}
+    </div>
+
+    <!-- 포트폴리오 첨부 -->
+    <div>
+      <label for="id_portfolio" class="block font-semibold mb-1">포트폴리오 첨부파일</label>
+      {{ form.portfolio|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <!-- 외부 포트폴리오 링크 -->
+    <div>
+      <label for="id_portfolio_link" class="block font-semibold mb-1">외부 포트폴리오 링크</label>
+      {{ form.portfolio_link|add_class:"w-full px-4 py-2 border rounded" }}
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white font-bold px-6 py-3 rounded hover:bg-blue-700 transition">
+      저장
+    </button>
+  </form>
+</div>
+
+<!-- 기술스택 버튼 클릭 처리 -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const skillInput = document.getElementById('id_skills');
+    const buttons = document.querySelectorAll('.skill-tag');
+    let selected = [];
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const skill = btn.dataset.skill;
+        if (selected.includes(skill)) {
+          selected = selected.filter(s => s !== skill);
+          btn.classList.remove('bg-blue-500', 'text-white');
+          btn.classList.add('bg-gray-200');
+        } else {
+          selected.push(skill);
+          btn.classList.remove('bg-gray-200');
+          btn.classList.add('bg-blue-500', 'text-white');
+        }
+        skillInput.value = selected.join(',');
+      });
+    });
+
+    if (skillInput.value) {
+      selected = skillInput.value.split(',');
+      buttons.forEach(btn => {
+        if (selected.includes(btn.dataset.skill)) {
+          btn.classList.remove('bg-gray-200');
+          btn.classList.add('bg-blue-500', 'text-white');
+        }
+      });
+    }
+  });
+</script>
+
+{% endblock %}

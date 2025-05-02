@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load split_filters %}
+{% block title %}{{ resume.name }} - 이력서 상세보기{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 px-4 bg-white p-6 rounded-lg shadow">
+
+  <!-- ✅ 기본정보 -->
+  <h1 class="text-2xl font-bold mb-4">{{ resume.name }}님의 이력서</h1>
+
+  <div class="space-y-3 text-gray-800 text-base">
+    <p><strong>연락처:</strong> {{ resume.phone }}</p>
+    <p><strong>이메일:</strong> {{ resume.email }}</p>
+
+    {% if resume.show_education and resume.education %}
+      <p><strong>학력:</strong><br>{{ resume.education|linebreaks }}</p>
+    {% endif %}
+
+    {% if resume.experience %}
+      <p><strong>경력:</strong><br>{{ resume.experience|linebreaks }}</p>
+    {% endif %}
+
+    {% if resume.career_level %}
+      <p><strong>경력 단계:</strong> {{ resume.career_level }}</p>
+    {% endif %}
+
+    {% if resume.preferred_location %}
+      <p><strong>희망 지역:</strong> {{ resume.preferred_location }}</p>
+    {% endif %}
+
+    {% if resume.employment_type %}
+      <p><strong>고용 형태:</strong> {{ resume.employment_type }}</p>
+    {% endif %}
+
+    {% if resume.bio %}
+      <p><strong>자기소개:</strong><br>{{ resume.bio|linebreaks }}</p>
+    {% endif %}
+
+    {% if resume.portfolio %}
+      <p><strong>포트폴리오 첨부파일:</strong>
+        <a href="{{ resume.portfolio.url }}" class="text-blue-500 underline" target="_blank">
+          다운로드
+        </a>
+      </p>
+    {% endif %}
+
+    {% if resume.portfolio_link %}
+      <p><strong>외부 포트폴리오:</strong>
+        <a href="{{ resume.portfolio_link }}" class="text-blue-500 underline" target="_blank">
+          {{ resume.portfolio_link }}
+        </a>
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- ✅ 기술 스택 버튼 -->
+  <div class="mt-6">
+    <strong>기술 스택:</strong>
+    {% with resume.skills|split:"," as selected_skills %}
+      {% with "Python,Django,React,HTML,CSS,JavaScript,SQL,Git"|split:"," as all_skills %}
+        <div class="flex flex-wrap gap-2 mt-2">
+          {% for skill in all_skills %}
+            {% if skill in selected_skills %}
+              <span class="px-3 py-1 rounded-full bg-blue-500 text-white text-sm">{{ skill }}</span>
+            {% else %}
+              <span class="px-3 py-1 rounded-full bg-gray-200 text-sm">{{ skill }}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endwith %}
+    {% endwith %}
+
+    {% if resume.skills_detail %}
+      <p class="mt-2 text-sm text-gray-700">{{ resume.skills_detail|linebreaks }}</p>
+    {% endif %}
+  </div>
+
+  <!-- ✅ 수정 / 삭제 버튼 -->
+  {% if user.is_authenticated and user == resume.user %}
+    <div class="flex gap-4 mt-8">
+      <a href="{% url 'resumes:resume_edit' resume.pk %}" class="text-sm px-4 py-2 bg-yellow-400 text-black rounded hover:bg-yellow-500">
+        수정
+      </a>
+      <form method="post" action="{% url 'resumes:resume_delete' resume.pk %}" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        {% csrf_token %}
+        <button type="submit" class="text-sm px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+          삭제
+        </button>
+      </form>
+    </div>
+  {% endif %}
+
+  <!-- ✅ 목록으로 -->
+  <a href="{% url 'resumes:resume_list' %}" class="inline-block mt-8 text-blue-500 hover:underline">← 이력서 목록으로</a>
+</div>
+{% endblock %}

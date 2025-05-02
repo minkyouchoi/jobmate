@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load split_filters %}
+{% block title %}내 이력서{% endblock %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold mb-6">내 이력서</h1>
+
+  <a href="{% url 'resumes:resume_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 text-sm mb-6 inline-block">
+    + 새 이력서 작성
+  </a>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for resume in resumes %}
+      <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition space-y-2">
+        <h2 class="text-lg font-semibold">{{ resume.name }}</h2>
+        <p class="text-sm text-gray-600">{{ resume.email }} | {{ resume.phone }}</p>
+        <p class="text-xs text-gray-500">작성일: {{ resume.created_at|date:'Y-m-d' }}</p>
+
+        {% if resume.show_education and resume.education %}
+          <p><strong>학력:</strong> {{ resume.education|truncatechars:50 }}</p>
+        {% endif %}
+
+        {% if resume.career_level %}
+          <p><strong>경력 단계:</strong> {{ resume.career_level }}</p>
+        {% endif %}
+
+        {% if resume.preferred_location %}
+          <p><strong>희망 지역:</strong> {{ resume.preferred_location }}</p>
+        {% endif %}
+
+        {% if resume.employment_type %}
+          <p><strong>고용 형태:</strong> {{ resume.employment_type }}</p>
+        {% endif %}
+
+        <p class="mt-3 font-semibold text-sm text-gray-700">
+            <p><strong>기술 스택</strong></p>
+        <div class="flex flex-wrap gap-2 mt-1">
+
+        <!-- 기술 스택 버튼 -->
+        {% with resume.skills|split:"," as selected_skills %}
+          {% with "Python,Django,React,HTML,CSS,JavaScript,SQL,Git"|split:"," as all_skills %}
+            <div class="flex flex-wrap gap-2 mt-2">
+              {% for skill in all_skills %}
+                {% if skill in selected_skills %}
+                  <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs">{{ skill }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endwith %}
+        {% endwith %}
+        </p>
+        </div>
+        <p></p>
+
+        <a href="{% url 'resumes:resume_detail' resume.pk %}" class="text-blue-500 text-sm hover:underline inline-block mt-4">
+          자세히 보기 →
+        </a>
+      </div>
+    {% empty %}
+      <p class="text-gray-500">아직 등록된 이력서가 없습니다.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}지원자 목록{% endblock %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold mb-6">[{{ job.title }}] 지원자 목록</h1>
+
+  {% if applications %}
+    <ul class="space-y-4">
+      {% for app in applications %}
+        <li class="bg-white p-4 rounded shadow">
+          <p class="font-semibold">{{ app.user_profile.user.username }}</p>
+          <p class="text-sm text-gray-600">{{ app.user_profile.phone }}</p>
+          <p class="text-sm text-gray-500 mt-1">지원일: {{ app.applied_at|date:"Y-m-d H:i" }}</p>
+          {% if app.resume %}
+            <a href="{% url 'resumes:resume_detail' app.resume.pk %}" class="text-blue-500 text-sm hover:underline mt-2 inline-block">이력서 보기 →</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-600">아직 지원자가 없습니다.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

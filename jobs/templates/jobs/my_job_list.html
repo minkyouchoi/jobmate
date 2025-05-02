@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}내가 올린 공고들{% endblock %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold mb-6">내가 등록한 공고</h1>
+
+  {% if jobs %}
+    <ul class="space-y-4">
+      {% for job in jobs %}
+        <li class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold">{{ job.title }}</h2>
+          <p class="text-sm text-gray-600">{{ job.company_name }} | {{ job.location }}</p>
+          <p class="text-xs text-gray-500 mt-1">마감일: {{ job.deadline }}</p>
+          <a href="{% url 'applications:applicants_for_job' job.pk %}" class="text-blue-500 text-sm hover:underline mt-2 inline-block">
+            지원자 보기 →
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-600">아직 등록한 공고가 없습니다.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
